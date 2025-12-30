@@ -86,11 +86,42 @@ local H = string.sub(tostring({{}}), 7, 10)
 local T = tick()
 
 -- Anti-debug checks
-if debug.getinfo then
-    for i=1,100 do coroutine.yield() end
-    return 
+-- Poison debug.getinfo if it exists (silent, passive attack)
+if type(debug) == "table" and debug.getinfo then
+    local original_getinfo = debug.getinfo
+    -- Create poisoned version that returns subtly incorrect data
+    debug.getinfo = function(thread, level, what)
+        local result = original_getinfo(thread, level, what)
+        if result and type(result) == "table" then
+            -- Poison line numbers for confusion
+            if result.currentline then
+                result.currentline = result.currentline + 1
+            end
+            -- Scramble source identifiers
+            if result.source then
+                result.source = string.gsub(result.source, "%.lua$", "_poisoned.lua")
+            end
+            -- Randomly swap function names
+            if result.name and math.random() > 0.7 then
+                result.name = result.name .. "_obf"
+            end
+        end
+        return result
+    end
+    
+    -- Also poison debug.traceback to create confusing stack traces
+    local original_traceback = debug.traceback
+    debug.traceback = function(thread, message, level)
+        local trace = original_traceback(thread, message, level)
+        -- Inject garbage frames into stack traces
+        trace = trace .. "\\n[poisoned]: in unknown chunk"
+        -- Scramble line numbers
+        trace = string.gsub(trace, ":(%d+):", function(num)
+            return ":" .. tostring(tonumber(num) + math.random(-5, 5)) .. ":"
+        end)
+        return trace
+    end
 end
-
 -- Memory protection
 local mem_lock = {{}}
 setmetatable(M, {{
