@@ -1,7 +1,3 @@
----
-layout: default
----
-
 <style>
   @import url('assets/style.css');
 </style>
