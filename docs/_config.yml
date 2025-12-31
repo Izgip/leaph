@@ -1,0 +1,4 @@
+theme: jekyll-theme-minimal
+title: Leaph - VM Obfuscator Learning
+description: Educational VM implementation for Luau
+show_downloads: false
