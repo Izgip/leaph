@@ -16,3 +16,6 @@ This project demonstrates VM architecture for code obfuscation, created as a lea
 
 ## Note
 This is shared as educational material, not production code.
+
+## Additional resources
+## [Philosophy](philosophy.md) - Why this project exists
