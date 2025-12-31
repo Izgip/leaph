@@ -1,8 +1,3 @@
----
-title: Leaph - VM Obfuscator Learning Project
-description: Educational VM-based obfuscator implementation for Luau
----
-
 # 🌀 Leaph  
 **Virtual Machine Obfuscator Learning Project**
 
